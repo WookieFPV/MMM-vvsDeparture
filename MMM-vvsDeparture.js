@@ -15,6 +15,7 @@ Module.register("MMM-vvsDeparture", {
 		reloadInterval: 1 * 60 * 1000, // every minute
 		colorDelay: true,
 		colorNoDelay: true,
+		id: Math.floor(Math.random() * 199254740991), //generate random ID
 		number: undefined,
 		direction: undefined
 	},
@@ -45,14 +46,14 @@ Module.register("MMM-vvsDeparture", {
 		Log.log("Starting module: " + self.name);
 
 		self.departure = [];
-		self.sendSocketNotification("GET_DEPARTURES", { "config": self.config });
+		self.sendSocketNotification("GET_DEPARTURES" + self.config.id, { "config": self.config });
 	},
 
 	// socketNotificationReceived from helper
 	socketNotificationReceived: function (notification, payload) {
 		var self = this;
 
-		if (notification === "NEW_DEPARTURE") {
+		if (notification === "NEW_DEPARTURE" + self.config.id) {
 			self.departure = payload;
 			self.updateDom();
 		}

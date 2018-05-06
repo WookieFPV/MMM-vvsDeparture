@@ -21,7 +21,7 @@ module.exports = NodeHelper.create({
 	socketNotificationReceived: function (notification, payload) {
 		var self = this;
 
-		if (notification === "GET_DEPARTURES") {
+		if (notification === "GET_DEPARTURES" + self.config.id) {
 			self.updateStation(payload.config.station_id);
 
 			setInterval(function () { self.updateStation(payload.config.station_id); }, payload.config.reloadInterval);
@@ -34,7 +34,7 @@ module.exports = NodeHelper.create({
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 		request(url, function (error, response, body) {
 			if (!error && response.statusCode == 200) {
-				self.sendSocketNotification("NEW_DEPARTURE", JSON.parse(body));
+				self.sendSocketNotification("NEW_DEPARTURE" + self.config.id, JSON.parse(body));
 			}
 		});
 	}
